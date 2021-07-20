@@ -22,6 +22,9 @@ class Scraper:
         html_body = get_response_body(url, referer_google=google_refer)
         
         identifier = self.rw.get_random_word()
+
+        while identifier in self.results:
+                identifier = self.rw.get_random_word()
                 
         self.results[identifier] = scrape(html_body, url,
          tags_to_get=custom_tags, 
@@ -42,6 +45,10 @@ class Scraper:
         for url in urls:
             html_body = get_response_body(url, referer_google=google_refer)
             identifier = self.rw.get_random_word()
+
+            while identifier in self.results:
+                identifier = self.rw.get_random_word()
+
             self.results[identifier] = scrape(html_body, url,
                 tags_to_get=custom_tags, 
                 attrs_keywords_to_get=custom_attrs,
@@ -141,6 +148,9 @@ class Scraper:
 
     def get_ids(self):
         return self.ids_sites
+
+    def get_url_id(self, url):
+        return self.ids_sites[get_best_match(url, self.ids_sites)]
 
     def save_results_to_file(self, folder="~/scrape_results/jsons/"):
         for id_, res in self.results:
