@@ -23,8 +23,8 @@ class Scraper:
         
         identifier = self.rw.get_random_word()
 
-        while identifier in self.results:
-                identifier = self.rw.get_random_word()
+        while identifier in self.results or identifier is None:
+            identifier = self.rw.get_random_word()
                 
         self.results[identifier] = scrape(html_body, url,
          tags_to_get=custom_tags, 
@@ -46,7 +46,7 @@ class Scraper:
             html_body = get_response_body(url, referer_google=google_refer)
             identifier = self.rw.get_random_word()
 
-            while identifier in self.results:
+            while identifier in self.results or identifier is None:
                 identifier = self.rw.get_random_word()
 
             self.results[identifier] = scrape(html_body, url,
