@@ -16,5 +16,4 @@ setup(
    description='A feature-rich web scraper',
    long_description=open('README.md').read(),
    install_requires=INSTALL_REQUIRES,
-   tests_require=INSTALL_REQUIRES
 )
