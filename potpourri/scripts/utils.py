@@ -48,5 +48,4 @@ def find_all_words(txt):
 
 
 def filter_list(list):
-    one_char = lambda x: True if len(x) > 1 and re.match(r"[^A-Za-z0-9]", x) != None else False
-    return [l for l in list if not one_char(l)]
+    return [re.sub(r"\s+", " ", l.strip()) for l in list if len(l) > 1 and not re.match(r"[^A-Za-z0-9]", l)]
