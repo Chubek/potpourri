@@ -1,4 +1,4 @@
-from potpourri.scripts.utils import *
+from .scripts.utils import *
 
 
 
