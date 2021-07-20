@@ -51,137 +51,78 @@ class Scraper:
         end = time.time()
 
         print(f"Operation done in {end - start} milliseconds.")
-        
+
         return identifiers
 
-    def get_h1(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
 
-        return self.results[res_id]['h1']
+    def __get_element(self, res_id, element):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+            
+        return self.results[get_best_match(res_id, self.results)][element]
+
+    def get_h1(self, res_id): 
+        return self.__get_element(res_id, "h1")
 
     def get_h2(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['h2']
+        return self.__get_element(res_id, "h2")
 
     def get_h3(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['h3']
+        return self.__get_element(res_id, "h3")
 
     def get_h4(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['h4']
+        return self.__get_element(res_id, "h4")
 
     def get_h5(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['h5']
+        return self.__get_element(res_id, "h5")
 
     def get_h6(self, res_id):
-        return self.results[res_id]['h6']
+        return self.__get_element(res_id, "h6")
 
     def get_body(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['body']
+        return self.__get_element(res_id, "body")
 
     def get_title(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
+        return self.__get_element(res_id, "title")
 
-        return self.results[res_id]['title']
-    
     def get_html(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['html']
+        return self.__get_element(res_id, "html")
 
     def get_hrefs(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['hrefs']
+        return self.__get_element(res_id, "hrefs")
 
     def get_meta_desc(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['meta_desc']
+        return self.__get_element(res_id, "meta_desc")
     
     def get_meta_keywords(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['meta_keywords']
+        return self.__get_element(res_id, "meta_keywords")
 
     def get_meta_author(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['meta_author']
+        return self.__get_element(res_id, "meta_author")
     
     def get_image_alts(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['image_alts']
+        return self.__get_element(res_id, "image_alts")
 
     def get_bolds(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['bolds']
+        return self.__get_element(res_id, "bolds")
 
     def get_italics(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['italics']
+        return self.__get_element(res_id, "italics")
 
     def get_lists(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['lists']
+        return self.__get_element(res_id, "lists")
 
     def get_strongs(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['strongs']
+        return self.__get_element(res_id, "strongs")
 
     def get_classics(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['classics']
+        return self.__get_element(res_id, "classics")
 
     def get_custom_tags(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['custom_tags']
+        return self.__get_element(res_id, "custom_tags")
 
     def get_custom_attrs(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-
-        return self.results[res_id]['custom_attrs']
-
-    def get_lengths(self, res_id):
-        if match_url(res_id):
-            res_id = self.ids_sites[res_id]
-            
-        return self.results[res_id]['lengths']
+        return self.__get_element(res_id, "custom_attrs")
 
     def pprint_results(self):
         pprint(self.results)

@@ -51,7 +51,7 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
 
     elements_ret = filter_list([r.strip().strip("\n") for r in elements_body if len(r) > 1])
 
-    results["classic"] = ";\n".join(elements_ret)
+    results["classics"] = ";\n".join(elements_ret)
 
     results["lengths"] = {"html_length": len(html_body), 
     "body_length": len(body),
