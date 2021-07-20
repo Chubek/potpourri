@@ -52,5 +52,5 @@ def find_all_words(txt):
 def filter_list(list):
     return [re.sub(r"\s+", " ", l.strip()) for l in list if len(l) > 1 and not re.match(r"[^A-Za-z0-9]", l)]
 
-def flatten_list(list):
-    return functools.reduce(operator.iconcat, list, [])
+def flatten_list(lists):
+    return functools.reduce(operator.iconcat, lists, [])
