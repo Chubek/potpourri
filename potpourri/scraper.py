@@ -31,7 +31,7 @@ class Scraper:
         
         end = time.time()
 
-        print(f"Operation done in {end - start} milliseconds.")
+        print(f"Operation done in {end - start} seconds.")
 
         return identifier
 
@@ -50,7 +50,7 @@ class Scraper:
             identifiers[url] = identifier
         end = time.time()
 
-        print(f"Operation done in {end - start} milliseconds.")
+        print(f"Operation done in {end - start} seconds.")
 
         return identifiers
 

@@ -19,7 +19,7 @@ class ProgrammableSearch:
 
         end = time.time()
 
-        print(f"Operation done in {end - start} milliseconds.")
+        print(f"Operation done in {end - start} seconds.")
 
         return self.results[keyword]
 
@@ -33,7 +33,7 @@ class ProgrammableSearch:
 
         end = time.time()
 
-        print(f"Operation done in {end - start} milliseconds.")
+        print(f"Operation done in {end - start} seconds.")
 
         return [self.results[keyword] for keyword in keywords]
 
@@ -49,7 +49,7 @@ class ProgrammableSearch:
 
         end = time.time()
 
-        print(f"Operation done in {end - start} milliseconds.")
+        print(f"Operation done in {end - start} seconds.")
 
         return [self.results[keyword] for keyword in keywords]
 
