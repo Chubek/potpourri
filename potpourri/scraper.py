@@ -10,18 +10,14 @@ from .scripts.utils import *
 
 
 class Scraper:
-    def __init__(self,
-      min_rake_length=2,
-       max_rake_length=4):
-
+    def __init__(self, min_rake_length=2, max_rake_length=4):
         self.results = {}
         self.ids_sites = {}
         self.rw = RandomWords()
         init_rake(min_rake_length, max_rake_length)
 
 
-    def scrape_single(self, url, get_kw=True, custom_tags={}, custom_attrs={}, 
-                google_refer=False):   
+    def scrape_single(self, url, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):   
 
         html_body = get_response_body(url, referer_google=google_refer)
         
@@ -35,8 +31,7 @@ class Scraper:
 
         return identifier
 
-    def scrape_multiple(self, urls, get_kw=True, custom_tags={}, custom_attrs={}, 
-                google_refer=False):
+    def scrape_multiple(self, urls, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):
         identifiers = {}
         for url in urls:
             html_body = get_response_body(url, referer_google=google_refer)

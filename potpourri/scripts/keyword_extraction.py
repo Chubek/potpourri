@@ -1,6 +1,10 @@
 import nltk
-nltk.download('stopwords')
 from rake_nltk import Rake
+
+try:
+    nltk.data.find('stopwords')
+except LookupError:
+    nltk.download('stopwords')
 
 r = None
 
