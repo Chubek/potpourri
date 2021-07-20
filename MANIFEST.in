@@ -1,2 +1,2 @@
 include setup README LICENSE CHANGES 
-recursive-include potpourri/scripts potpourri/test *
+recursive-include potpourri/scripts potpourri *
