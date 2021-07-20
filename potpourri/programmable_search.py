@@ -1,6 +1,6 @@
 from potpourri.scripts.get_urls import search_web
-
-
+from potpourri.scripts.utils import *
+from pprint import pprint
 
 class ProgrammableSearch:
     

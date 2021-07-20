@@ -1,0 +1,6 @@
+"bs4"
+"pytest"
+"Random-Word"
+"rake-nltk"
+"nltk"
+"lxml"
