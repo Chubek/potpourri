@@ -41,3 +41,7 @@ class ThreadWithResult(threading.Thread):
         def function():
             self.result = target(*args, **kwargs)
         super().__init__(group=group, target=function, name=name, daemon=daemon)
+
+
+def find_all_words(txt):
+    return len(re.findall(r"(\w+)", txt))

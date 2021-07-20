@@ -1,5 +1,6 @@
 from lxml.html.soupparser import fromstring
 from .keyword_extraction import kword
+from .utils import find_all_words
 import time
 
 def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=False):
@@ -8,11 +9,11 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
 
     results = {"url": url}
     
-    body = root.xpath("//body/descendant::*/text()")
-    title = root.xpath("//title/text()")
+    body = "\n".join(root.xpath("//body/descendant::*/text()"))
+    title = root.xpath("//title/text()")[0]
 
-    results["body"] = {"whole": body, "keywords": None}
-    results["title"] = {"whole": title, "keywords": None}
+    results["body"] = {"whole": body, "num_words": find_all_words(body), "keywords": None}
+    results["title"] = {"whole": title, "num_words": find_all_words(title), "keywords": None}
 
     if get_keywords:
         keywords_body = kword(body)
