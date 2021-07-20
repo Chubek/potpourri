@@ -10,7 +10,6 @@ setup(
    author='Chubak Bidpaa',
    author_email='chubak.bidpaa@octoshrew.com',
    packages=['potpourri', 'potpourri.scripts'],
-   scripts=[],
    url='https://github.com/OctoShrew/potpourri',
    license='LICENSE',
    description='A feature-rich web scraper',
