@@ -45,3 +45,8 @@ class ThreadWithResult(threading.Thread):
 
 def find_all_words(txt):
     return len(re.findall(r"(\w+)", txt))
+
+
+def filter_list(list):
+    one_char = lambda x: True if len(x) > 1 and re.match(r"[^A-Za-z0-9]", x) != None else False
+    return [l for l in list if not one_char(l)]

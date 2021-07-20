@@ -7,7 +7,7 @@ from .scripts.unqlite_interface import store_in_db
 from random_word import RandomWords
 from pprint import pprint
 from .scripts.utils import *
-
+import time
 
 class Scraper:
     def __init__(self, min_rake_length=2, max_rake_length=4):
@@ -18,7 +18,7 @@ class Scraper:
 
 
     def scrape_single(self, url, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):   
-
+        start = time.time()
         html_body = get_response_body(url, referer_google=google_refer)
         
         identifier = self.rw.get_random_word()
@@ -28,10 +28,16 @@ class Scraper:
          attrs_keywords_to_get=custom_attrs,
          get_keywords=get_kw)
         self.ids_sites[url] = identifier
+        
+        end = time.time()
+
+        print(f"Operation done in {end - start} milliseconds.")
 
         return identifier
 
     def scrape_multiple(self, urls, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):
+        start = time.time()
+
         identifiers = {}
         for url in urls:
             html_body = get_response_body(url, referer_google=google_refer)
@@ -42,7 +48,10 @@ class Scraper:
                 get_keywords=get_kw)
             self.ids_sites[url] = identifier
             identifiers[url] = identifier
+        end = time.time()
 
+        print(f"Operation done in {end - start} milliseconds.")
+        
         return identifiers
 
     def get_h1(self, res_id):
