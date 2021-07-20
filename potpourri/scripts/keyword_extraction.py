@@ -2,7 +2,7 @@ import nltk
 from rake_nltk import Rake
 
 try:
-    nltk.data.find('stopwords')
+    nltk.data.find('corpora/stopwords')
 except LookupError:
     nltk.download('stopwords')
 
