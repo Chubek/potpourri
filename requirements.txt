@@ -4,4 +4,4 @@ Random-Word
 rake-nltk
 nltk
 lxml
-git+https://github.com/coleifer/unqlite-python.git
+unqlite-python
