@@ -1,5 +1,5 @@
 from lxml.html.soupparser import fromstring
-from src.scripts.keyword_extraction import kword
+from potpourri.scripts.keyword_extraction import kword
 import time
 
 def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=False):

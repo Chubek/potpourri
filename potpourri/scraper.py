@@ -1,12 +1,12 @@
-from src.scripts.scrape import *
-from src.scripts.keyword_extraction import *
-from src.scripts.request_body import get_response_body
-from src.scripts.store_in_dir import store_in_dir
-from src.scripts.get_urls import search_web
-from src.scripts.unqlite_interface import store_in_db
+from potpourri.scripts.scrape import *
+from potpourri.scripts.keyword_extraction import *
+from potpourri.scripts.request_body import get_response_body
+from potpourri.scripts.store_in_dir import store_in_dir
+from potpourri.scripts.get_urls import search_web
+from potpourri.scripts.unqlite_interface import store_in_db
 from random_word import RandomWords
 from pprint import pprint
-from src.scripts.utils import *
+from potpourri.scripts.utils import *
 
 
 class Scraper:

@@ -1,4 +1,4 @@
-from src.scripts.get_urls import search_web
+from potpourri.scripts.get_urls import search_web
 
 
 
