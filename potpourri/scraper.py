@@ -121,8 +121,14 @@ class Scraper:
     def get_custom_tags(self, res_id):
         return self.__get_element(res_id, "custom_tags")
 
+    def get_specific_custom_tag(self, res_id, tag):
+        return self.__get_element(res_id, "custom_tags")[tag]
+
     def get_custom_attrs(self, res_id):
         return self.__get_element(res_id, "custom_attrs")
+
+    def get_specific_custom_attr(self, res_id, attr):
+        return self.__get_element(res_id, "custom_attrs")[attr]
 
     def pprint_results(self):
         pprint(self.results)

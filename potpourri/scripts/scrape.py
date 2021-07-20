@@ -1,6 +1,6 @@
 from lxml.html.soupparser import fromstring
 from .keyword_extraction import kword
-from .utils import find_all_words, filter_list
+from .utils import find_all_words, filter_list, flatten_list
 import time
 
 def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=False):
@@ -28,16 +28,16 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
     results["meta_keywords"] = filter_list(root.xpath("//meta[@name = 'keywords']/@content"))
     results["meta_author"] = filter_list(root.xpath("//meta[@name = 'author']/@content"))
     results["image_alts"] = filter_list(root.xpath("//img/@alt"))
-    results["bolds"] = filter_list(root.xpath("//b/text()"))
-    results["italics"] = filter_list(root.xpath("//i/text()"))
-    results["lists"] = filter_list(root.xpath("//ul/text()"))
-    results["strongs"] = filter_list(root.xpath("//strong/text()"))
-    results["h1"] = filter_list(root.xpath("//h1/text()"))
-    results["h2"] = filter_list(root.xpath("//h2/text()"))
-    results["h3"] = filter_list(root.xpath("//h3/text()"))
-    results["h4"] = filter_list(root.xpath("//h4/text()"))
-    results["h5"] = filter_list(root.xpath("//h5/text()"))
-    results["h6"] = filter_list(root.xpath("//h6/text()"))
+    results["bolds"] = filter_list(flatten_list(root.xpath("//b/text()"), root.xpath("//b/descendant::*//text()")))
+    results["italics"] = filter_list(flatten_list(root.xpath("//i/text()"), root.xpath("//i/descendant::*//text()")))
+    results["lists"] = filter_list(flatten_list(root.xpath("//ul/text()"), root.xpath("//ul/descendant::*//text()")))
+    results["strongs"] = filter_list(flatten_list(root.xpath("//strong/text()"), root.xpath("//strong/descendant::*//text()")))
+    results["h1"] = filter_list(flatten_list(root.xpath("//h1/text()"), root.xpath("//h1/descendant::*//text()")))
+    results["h2"] = filter_list(flatten_list(root.xpath("//h2/text()"), root.xpath("//h2/descendant::*//text()")))
+    results["h3"] = filter_list(flatten_list(root.xpath("//h3/text()"), root.xpath("//h3/descendant::*//text()")))
+    results["h4"] = filter_list(flatten_list(root.xpath("//h4/text()"), root.xpath("//h4/descendant::*//text()")))
+    results["h5"] = filter_list(flatten_list(root.xpath("//h5/text()"), root.xpath("//h5/descendant::*//text()")))
+    results["h6"] = filter_list(flatten_list(root.xpath("//h6/text()"), root.xpath("//h6/descendant::*//text()")))
 
     try:
         results["html"] = html_body.decode("utf-8")

@@ -1,6 +1,8 @@
 from difflib import SequenceMatcher
 import re
 import threading
+import functools
+import operator
 
 url_regex = re.compile(r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})')
 
@@ -49,3 +51,6 @@ def find_all_words(txt):
 
 def filter_list(list):
     return [re.sub(r"\s+", " ", l.strip()) for l in list if len(l) > 1 and not re.match(r"[^A-Za-z0-9]", l)]
+
+def flatten_list(list):
+    return functools.reduce(operator.iconcat, list, [])
