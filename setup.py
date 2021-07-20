@@ -9,7 +9,7 @@ setup(
    version='0.1.0',
    author='Chubak Bidpaa',
    author_email='chubak.bidpaa@octoshrew.com',
-   packages=['potpourri', 'potpourri.test', 'potpourri.scripts'],
+   packages=['potpourri', 'potpourri.scripts'],
    scripts=[],
    url='https://github.com/OctoShrew/potpourri',
    license='LICENSE',

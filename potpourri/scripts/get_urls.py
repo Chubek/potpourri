@@ -1,4 +1,3 @@
-from dotenv import dotenv_values
 from googleapiclient.discovery import build
 import os
 

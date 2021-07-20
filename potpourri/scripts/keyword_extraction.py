@@ -1,4 +1,3 @@
-import re
 import nltk
 nltk.download('stopwords')
 from rake_nltk import Rake
