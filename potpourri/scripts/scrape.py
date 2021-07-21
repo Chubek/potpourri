@@ -11,7 +11,7 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
 
     results = {"url": {"address": url, 
             "page_speed": get_page_speed(url), 
-            "page_rank": get_page_ranks(url)}}
+            "page_rank": get_page_ranks([url])}}
     
     body = " ".join(filter_list(root.xpath("//body/descendant::*/text()")))
     title = root.xpath("//title/text()")[0]
