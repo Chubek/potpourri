@@ -1,8 +1,7 @@
 from difflib import SequenceMatcher
 import re
 import threading
-import functools
-import operator
+from urllib.parse import urlparse
 
 url_regex = re.compile(r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})')
 
@@ -54,3 +53,17 @@ def filter_list(list):
 
 def flatten_list(lists):
     return sum(lists, [])
+
+def check_internal(main_url, url):
+    main_parse = urlparse(main_url)
+    url_parse = urlparse|(url)
+
+    return main_url.netloc == url_parse.netloc
+
+
+def split_internal_external(main_url, hrefs):
+    internal_urls = [url for url in hrefs if check_internal(main_url, url)]
+    external_urls = [url for url in hrefs if not check_internal(main_url, url)]
+
+
+    return internal_urls, external_urls

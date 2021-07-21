@@ -1,6 +1,6 @@
 from lxml.html.soupparser import fromstring
 from .keyword_extraction import kword
-from .utils import find_all_words, filter_list, flatten_list
+from .utils import find_all_words, filter_list, flatten_list, split_internal_external
 import time
 
 def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=False):
@@ -23,6 +23,7 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
         results["title"]["keywords"] = keywords_title
 
     results["hrefs"] = filter_list(root.xpath("//a/@href"))
+    results["internal_urls"], results["external_urls"] = split_internal_external(url, results["hrefs"])
     results["meta_charset"] = filter_list(root.xpath("//meta/@charset"))[0]
     results["meta_desc"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'description']/@content")), 
                     root.xpath("//meta[@name = 'Description']/@content")]))

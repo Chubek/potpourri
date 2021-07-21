@@ -136,6 +136,12 @@ class Scraper:
 
     def get_specific_custom_attr(self, res_id, attr):
         return self.__get_element(res_id, "custom_attrs")[attr]
+    
+    def get_internal_urls(self, res_id, attr):
+        return self.__get_element(res_id, "internal_urls")
+
+    def get_external_urls(self, res_id, attr):
+        return self.__get_element(res_id, "external_urls")
 
     def pprint_results(self):
         pprint(self.results)
