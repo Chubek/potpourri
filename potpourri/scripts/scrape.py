@@ -1,5 +1,7 @@
 from lxml.html.soupparser import fromstring
 from .keyword_extraction import kword
+from .page_speed import get_page_speed, get_page_speed_multiple
+from .page_rank import get_page_ranks
 from .utils import find_all_words, filter_list, flatten_list, split_internal_external
 import time
 
@@ -7,7 +9,9 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
     start = time.time()
     root = fromstring(html_body)
 
-    results = {"url": url}
+    results = {"url": {"address": url, 
+            "page_speed": get_page_speed(url), 
+            "page_rank": get_page_ranks(url)}}
     
     body = " ".join(filter_list(root.xpath("//body/descendant::*/text()")))
     title = root.xpath("//title/text()")[0]
@@ -22,8 +26,16 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
         results["body"]["keywords"] = keywords_body
         results["title"]["keywords"] = keywords_title
 
-    results["hrefs"] = filter_list(root.xpath("//a/@href"))
-    results["internal_urls"], results["external_urls"] = split_internal_external(url, results["hrefs"])
+    results["links"] = {}
+
+    results["links"]["hrefs"] = filter_list(root.xpath("//a/@href"))
+    results["links"]["internal_urls"], results["external_urls"] = split_internal_external(url, results["links"]["hrefs"])
+    results["links"]["internal_urls_speeds"] = get_page_speed_multiple(results["internal_urls"])
+    results["links"]["external_urls_speeds"] = get_page_speed_multiple(results["external_urls"])
+    results["links"]["internal_urls_ranks"] = get_page_ranks(results["internal_urls"])
+    results["links"]["external_urls_ranks"] = get_page_ranks(results["external_urls"])
+
+
     results["meta_charset"] = filter_list(root.xpath("//meta/@charset"))[0]
     results["meta_desc"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'description']/@content")), 
                     root.xpath("//meta[@name = 'Description']/@content")]))

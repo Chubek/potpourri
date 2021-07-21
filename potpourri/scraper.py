@@ -96,7 +96,7 @@ class Scraper:
         return self.__get_element(res_id, "html")
 
     def get_hrefs(self, res_id):
-        return self.__get_element(res_id, "hrefs")
+        return self.__get_element(res_id, "links")["hrefs"]
 
     def get_meta_desc(self, res_id):
         return self.__get_element(res_id, "meta_desc")
@@ -137,11 +137,29 @@ class Scraper:
     def get_specific_custom_attr(self, res_id, attr):
         return self.__get_element(res_id, "custom_attrs")[attr]
     
-    def get_internal_urls(self, res_id, attr):
-        return self.__get_element(res_id, "internal_urls")
+    def get_internal_urls(self, res_id):
+        return self.__get_element(res_id, "links")["internal_urls"]
 
-    def get_external_urls(self, res_id, attr):
-        return self.__get_element(res_id, "external_urls")
+    def get_external_urls(self, res_id):
+        return self.__get_element(res_id, "links")["external_urls"]
+
+    def get_internal_urls_speeds(self, res_id):
+        return self.__get_element(res_id, "links")["internal_urls_speeds"]
+
+    def get_external_urls_speeds(self, res_id):
+        return self.__get_element(res_id, "links")["external_urls_speeds"]
+
+    def get_internal_urls_ranks(self, res_id):
+        return self.__get_element(res_id, "links")["internal_urls_ranks"]
+
+    def get_external_urls_ranks(self, res_id):
+        return self.__get_element(res_id, "links")["external_urls_ranks"]
+
+    def get_page_speed(self, res_id):
+        return self.__get_element(res_id, "page_speed")
+
+    def get_page_rank(self, res_id):
+        return self.__get_element(res_id, "page_rank")
 
     def pprint_results(self):
         pprint(self.results)
