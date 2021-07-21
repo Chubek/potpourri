@@ -159,10 +159,10 @@ class Scraper:
         return self.__get_element(res_id, "links")["external_urls_ranks"]
 
     def get_page_speed(self, res_id):
-        return self.__get_element(res_id, "page_speed")
+        return self.__get_element(res_id, "url")["page_speed"]
 
     def get_page_rank(self, res_id):
-        return self.__get_element(res_id, "page_rank")
+        return self.__get_element(res_id, "url")["page_rank"]
 
     def pprint_results(self):
         pprint(self.results)
