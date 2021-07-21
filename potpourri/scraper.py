@@ -4,6 +4,9 @@ from .scripts.request_body import get_response_body
 from .scripts.store_in_dir import store_in_dir
 from .scripts.get_urls import search_web
 from .scripts.unqlite_interface import store_in_db
+from .scripts.page_speed import get_page_speed_multiple
+from .scripts.page_rank import get_page_ranks
+
 from random_word import RandomWords
 from pprint import pprint
 from .scripts.utils import *
@@ -201,3 +204,58 @@ class Scraper:
             results_to_return.append(self.results[get_best_match(id_, self.results)])
         
         return results_to_return
+
+
+    def request_internal_urls_speeds(self, res_id):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        internal_urls = self.get_internal_urls(res_id)
+
+        internal_urls_speed = get_page_speed_multiple(internal_urls)
+
+        self.results[res_id]["links"]["internal_urls_speeds"] = internal_urls_speed
+
+        return internal_urls_speed
+
+   
+    def request_external_urls_speeds(self, res_id):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        external_urls = self.get_external_urls(res_id)
+
+        external_urls_speed = get_page_speed_multiple(external_urls)
+
+        self.results[res_id]["links"]["external_urls_speeds"] = external_urls_speed
+
+        return external_urls_speed
+
+    def request_internal_urls_ranks(self, res_id):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        internal_urls = self.get_internal_urls(res_id)
+
+        internal_urls_ranks = get_page_ranks(internal_urls)
+
+        self.results[res_id]["links"]["internal_urls_speeds"] = internal_urls_ranks
+
+        return internal_urls_ranks
+
+    def request_external_urls_ranks(self, res_id):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        external_urls = self.get_external_urls(res_id)
+
+        external_urls_ranks = get_page_ranks(external_urls)
+
+        self.results[res_id]["links"]["internal_urls_speeds"] = external_urls_ranks
+
+        return external_urls_ranks
+
+        
+
+        
+        
