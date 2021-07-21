@@ -30,10 +30,10 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
 
     results["links"]["hrefs"] = filter_list(root.xpath("//a/@href"))
     results["links"]["internal_urls"], results["external_urls"] = split_internal_external(url, results["links"]["hrefs"])
-    results["links"]["internal_urls_speeds"] = get_page_speed_multiple(results["internal_urls"])
-    results["links"]["external_urls_speeds"] = get_page_speed_multiple(results["external_urls"])
-    results["links"]["internal_urls_ranks"] = get_page_ranks(results["internal_urls"])
-    results["links"]["external_urls_ranks"] = get_page_ranks(results["external_urls"])
+    results["links"]["internal_urls_speeds"] = get_page_speed_multiple(results["links"]["internal_urls"])
+    results["links"]["external_urls_speeds"] = get_page_speed_multiple(results["links"]["external_urls"])
+    results["links"]["internal_urls_ranks"] = get_page_ranks(results["links"]["internal_urls"])
+    results["links"]["external_urls_ranks"] = get_page_ranks(results["links"]["external_urls"])
 
 
     results["meta_charset"] = filter_list(root.xpath("//meta/@charset"))[0]
