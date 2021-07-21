@@ -1,17 +1,16 @@
 from lxml.html.soupparser import fromstring
 from .keyword_extraction import kword
-from .page_speed import get_page_speed, get_page_speed_multiple
 from .page_rank import get_page_ranks
-from .utils import find_all_words, filter_list, flatten_list, split_internal_external
+from .utils import find_all_words, filter_list, flatten_list, split_internal_external, parse_url
 import time
 
 def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=False):
     start = time.time()
     root = fromstring(html_body)
 
-    results = {"url": {"address": url, 
-            "page_speed": get_page_speed(url), 
-            "page_rank": get_page_ranks([url])}}
+    results = {"url": {"address": url, "parsed": parse_url(url),
+            "page_speed": "Not requsted yet", 
+            "page_rank": "Not requsted yet"}}
     
     body = " ".join(filter_list(root.xpath("//body/descendant::*/text()")))
     title = root.xpath("//title/text()")[0]

@@ -67,3 +67,13 @@ def split_internal_external(main_url, hrefs):
 
 
     return internal_urls, external_urls
+
+def parse_url(url):
+    url_parsed = urlparse(url)
+
+    return {"netloc": url_parsed.netloc, 
+        "scheme": url_parsed.scheme, 
+        "path": url_parsed.path, 
+        "params": url_parsed.params, 
+        "query": url_parsed.query, 
+        "fragment": url_parsed.fragment}

@@ -4,7 +4,7 @@ from .scripts.request_body import get_response_body
 from .scripts.store_in_dir import store_in_dir
 from .scripts.get_urls import search_web
 from .scripts.unqlite_interface import store_in_db
-from .scripts.page_speed import get_page_speed_multiple
+from .scripts.page_speed import get_page_speed_multiple, get_page_speed
 from .scripts.page_rank import get_page_ranks
 
 from random_word import RandomWords
@@ -164,6 +164,12 @@ class Scraper:
     def get_page_rank(self, res_id):
         return self.__get_element(res_id, "url")["page_rank"]
 
+    def get_address(self, res_id):
+        return self.__get_element(res_id, "url")["address"]
+
+    def get_url_parsed(self, res_id):
+        return self.__get_element(res_id, "url")["parsed"]
+
     def pprint_results(self):
         pprint(self.results)
 
@@ -255,7 +261,29 @@ class Scraper:
 
         return external_urls_ranks
 
-        
+    def request_own_page_speed(self, res_id):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        url = self.results[res_id]["url"]["address"]
+
+        page_speed = get_page_speed(url)
+
+        self.results[res_id]["url"]["page_speed"] = page_speed
+
+        return page_speed
+
+    def request_own_page_rank(self, res_id):
+        if match_url(res_id):
+            res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        url = self.results[res_id]["url"]["parsed"]["netloc"]
+
+        page_rank = get_page_ranks(url)
+
+        self.results[res_id]["url"]["page_rank"] = page_rank
+
+        return page_rank
 
         
         
