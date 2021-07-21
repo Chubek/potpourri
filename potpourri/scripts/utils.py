@@ -55,6 +55,12 @@ def flatten_list(lists):
     return sum(lists, [])
 
 def check_internal(main_url, url):
+    if not "http" in main_url:
+        main_url = "http://" + main_url
+
+    if not "http" in url:
+        url = "http://" + url
+
     main_parse = urlparse(main_url)
     url_parse = urlparse(url)
 
@@ -69,6 +75,9 @@ def split_internal_external(main_url, hrefs):
     return internal_urls, external_urls
 
 def parse_url(url):
+    if not "http" in url:
+        url = "http://" + url
+
     url_parsed = urlparse(url)
 
     return {"netloc": url_parsed.netloc, 
