@@ -24,12 +24,12 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
 
     results["hrefs"] = filter_list(root.xpath("//a/@href"))
     results["meta_charset"] = filter_list(root.xpath("//meta/@charset"))[0]
-    results["meta_desc"] = flatten_list(filter_list(root.xpath("//meta[@name = 'description']/@content")), 
-                    filter_list(root.xpath("//meta[@name = 'Description']/@content")))
-    results["meta_keywords"] = flatten_list(filter_list(root.xpath("//meta[@name = 'keywords']/@content")), 
-                    filter_list(root.xpath("//meta[@name = 'Keywords']/@content")))
-    results["meta_author"] = flatten_list(filter_list(root.xpath("//meta[@name = 'author']/@content")), 
-                    filter_list(root.xpath("//meta[@name = 'Author']/@content")))
+    results["meta_desc"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'description']/@content")), 
+                    root.xpath("//meta[@name = 'Description']/@content")]))
+    results["meta_keywords"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'keywords']/@content")), 
+                    root.xpath("//meta[@name = 'Keywords']/@content")]))
+    results["meta_author"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'author']/@content")), 
+                    root.xpath("//meta[@name = 'Author']/@content")]))
     results["image_alts"] = filter_list(root.xpath("//img/@alt"))
     results["bolds"] = filter_list(flatten_list([root.xpath("//b/text()"), root.xpath("//b/descendant::*/text()")]))
     results["italics"] = filter_list(flatten_list([root.xpath("//i/text()"), root.xpath("//i/descendant::*/text()")]))
