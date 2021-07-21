@@ -56,9 +56,9 @@ def flatten_list(lists):
 
 def check_internal(main_url, url):
     main_parse = urlparse(main_url)
-    url_parse = urlparse|(url)
+    url_parse = urlparse(url)
 
-    return main_url.netloc == url_parse.netloc
+    return main_parse.netloc == url_parse.netloc
 
 
 def split_internal_external(main_url, hrefs):
