@@ -44,7 +44,7 @@ class Scraper:
     def scrape_multiple(self, urls, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):
         start = time.time()
 
-        identifiers = {}
+        identifiers = []
         for url in urls:
             html_body = get_response_body(url, referer_google=google_refer)
             identifier = self.rw.get_random_word()
@@ -57,7 +57,7 @@ class Scraper:
                 attrs_keywords_to_get=custom_attrs,
                 get_keywords=get_kw)
             self.ids_sites[url] = identifier
-            identifiers[url] = identifier
+            identifiers.append(identifier)
         end = time.time()
 
         print(f"Operation done in {end - start} seconds.")
