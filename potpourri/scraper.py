@@ -273,6 +273,14 @@ class Scraper:
 
         return page_speed
 
+    def request_own_page_speed_multiple(self, res_ids):
+        ret = {}
+
+        for res_id in res_ids:
+            ret[res_id] = self.request_own_page_speed(res_id)
+
+        return ret
+
     def request_own_page_rank(self, res_id):
         if match_url(res_id):
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
@@ -284,6 +292,14 @@ class Scraper:
         self.results[res_id]["url"]["page_rank"] = page_rank
 
         return page_rank
+
+    def request_own_page_rank_multiple(self, res_ids):
+        ret = {}
+
+        for res_id in res_ids:
+            ret[res_id] = self.request_own_page_rank(res_id)
+
+        return ret
 
         
         
