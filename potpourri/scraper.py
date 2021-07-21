@@ -279,7 +279,7 @@ class Scraper:
 
         url = self.results[res_id]["url"]["parsed"]["netloc"]
 
-        page_rank = get_page_ranks(url)
+        page_rank = get_page_ranks([url])
 
         self.results[res_id]["url"]["page_rank"] = page_rank
 
