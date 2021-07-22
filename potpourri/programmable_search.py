@@ -15,7 +15,7 @@ class ProgrammableSearch:
 
         urls = search_web(keyword, self.res_num, self.step)
 
-        self.results[keyword] = {"keyword": keyword, "urls:": urls}
+        self.results[keyword] = {"keyword": keyword, "urls": urls}
 
         end = time.time()
 
@@ -29,7 +29,7 @@ class ProgrammableSearch:
         for keyword in keywords:
             urls = search_web(keyword, self.res_num, self.step)
 
-            self.results[keyword] = {"keyword": keyword, "urls:": urls}
+            self.results[keyword] = {"keyword": keyword, "urls": urls}
 
         end = time.time()
 
@@ -45,7 +45,7 @@ class ProgrammableSearch:
         for keyword in keywords:
             urls = search_web(keyword, self.res_num, self.step)
 
-            self.results[keyword] =  {"keyword": keyword, "urls:": urls}
+            self.results[keyword] =  {"keyword": keyword, "urls": urls}
 
         end = time.time()
 
