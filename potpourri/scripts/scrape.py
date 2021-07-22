@@ -35,7 +35,7 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
     results["links"]["external_urls_ranks"] = "Not Yet Requested"
 
 
-    results["meta_charset"] = filter_list(root.xpath("//meta/@charset"))[0]
+    results["meta_charset"] = filter_list(root.xpath("//meta/@charset"))
     results["meta_desc"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'description']/@content")), 
                     root.xpath("//meta[@name = 'Description']/@content")]))
     results["meta_keywords"] = filter_list(flatten_list([filter_list(root.xpath("//meta[@name = 'keywords']/@content")), 
@@ -57,7 +57,10 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
     try:
         results["html"] = html_body.decode("utf-8")
     except:
-        results["html"] = html_body.decode(results["meta_charset"])
+        try:
+            results["html"] = html_body.decode(results["meta_charset"][0])
+        except:
+            results["html"] = str(html_body)
 
 
     elements_body = root.xpath("//*[local-name()='p' or local-name()='li'\
