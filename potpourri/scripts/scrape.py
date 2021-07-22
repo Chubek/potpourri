@@ -13,7 +13,10 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
             "page_rank": "Not requsted yet"}}
     
     body = " ".join(filter_list(root.xpath("//body/descendant::*/text()")))
-    title = root.xpath("//title/text()")[0]
+    try:
+        title = root.xpath("//title/text()")[0]
+    except:
+        title = None
 
     results["body"] = {"whole": body, "num_words": find_all_words(body), "keywords": None}
     results["title"] = {"whole": title, "num_words": find_all_words(title), "keywords": None}
