@@ -70,3 +70,30 @@ class ProgrammableSearch:
         
         return results_to_return
 
+    def get_urls_only_single(self, keyword):
+        results = self.get_single_results(keyword)
+
+        return [res[0] for res in results["urls"]]
+
+    def get_urls_only_multiple(self, keywords):
+        results = []
+
+        for keyword in keywords:
+            results.append(self.get_urls_only_single(keyword))
+
+        return results
+
+    def get_descs_only_single(self, keyword):
+        results = self.get_single_results(keyword)
+
+        return [res[1] for res in results["urls"]]
+
+    def get_descs_only_multiple(self, keywords):
+        results = []
+
+        for keyword in keywords:
+            results.append(self.get_descs_only_single(keyword))
+
+        return results
+
+
