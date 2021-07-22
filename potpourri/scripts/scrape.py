@@ -1,6 +1,7 @@
 from lxml.html.soupparser import fromstring
+from io import StringIO
+from lxml import etree
 from .keyword_extraction import kword
-from .page_rank import get_page_ranks
 from .utils import find_all_words, filter_list, flatten_list, split_internal_external, parse_url
 import time
 
@@ -19,10 +20,17 @@ def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=Fals
         except:
             results["html"] = str(html_body)
     
-    
-    root = fromstring(results["html"])
-
-    
+    try:
+        root = fromstring(results["html"])
+    except:
+        try:
+            parser = etree.HTMLParser()
+            tree   = etree.parse(StringIO(results["html"]), parser)
+            root = fromstring(etree.tostring(tree.getroot(), pretty_print=True, method="html"))            
+        except:
+            parser = etree.HTMLParser()
+            tree   = etree.parse(StringIO(results["html"]), parser)
+            root = tree.getroot()
     
     body = " ".join(filter_list(root.xpath("//body/descendant::*/text()")))
     try:
