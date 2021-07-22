@@ -301,7 +301,7 @@ class Scraper:
 
         return ret
 
-    def make_pandas_df(self, keys_or_urls):
+    def make_pandas_df(self, keys_or_urls, descriptions=None):
         urls = []
         ids = []
         htmls = []
@@ -330,6 +330,8 @@ class Scraper:
         parsed_urls = []
         page_speeds = []
         page_ranks = []
+
+
 
         for res_id in keys_or_urls:
             if match_url(res_id):
@@ -364,8 +366,12 @@ class Scraper:
             page_speeds.append(self.get_page_speed(res_id))
             page_ranks.append(self.get_page_ranks(res_id))
 
+        if descriptions is None:
+            descriptions = [None for _ in range(len(keys_or_urls))]
+        
         df = pd.DataFrame.from_dict({"id": ids, 
                                         "url": urls,
+                                        "descriptions": descriptions,
                                         "parsed_url": parsed_urls,
                                         "page_speed": page_speeds,
                                         "page_rank": page_ranks,                                        
