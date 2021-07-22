@@ -6,11 +6,23 @@ import time
 
 def scrape(html_body, url, tags_to_get, attrs_keywords_to_get, get_keywords=False):
     start = time.time()
-    root = fromstring(html_body)
-
+    
     results = {"url": {"address": url, "parsed": parse_url(url),
             "page_speed": "Not requsted yet", 
             "page_rank": "Not requsted yet"}}
+    
+    try:
+        results["html"] = html_body.decode("utf-8")
+    except:
+        try:
+            results["html"] = html_body.decode(results["meta_charset"][0])
+        except:
+            results["html"] = str(html_body)
+    
+    
+    root = fromstring(results["html"])
+
+    
     
     body = " ".join(filter_list(root.xpath("//body/descendant::*/text()")))
     try:
