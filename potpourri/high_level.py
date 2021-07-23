@@ -1,4 +1,6 @@
 import threading
+import concurrent.futures
+import pandas as pd
 
 def search_and_scrape_single(scraper, psearch, keyword, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
@@ -22,13 +24,22 @@ def search_and_scrape_multiple(scraper, psearch, keywords, custom_tags={}, custo
 
     return df
 
-def run_parallel(funcs, args):
-    if len(funcs) != len(args):
-        funcs_list = [funcs[0] for _ in range(len(args))]
+def run_parallel(func, args):
+    res = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
 
-    dict_func_args = dict(zip(funcs_list, args))
+        func_results = {executor.submit(func, *arg): arg for arg in args}
 
-    for func, args in dict_func_args.items():
-        threading.Thread(target=func, args=(*args, )).start()
+        for future in concurrent.futures.as_completed(func_results):
+            arg = func_results[future]
+            try:
+                data = future.result()
+                res.append(data)
+            except Exception as exc:
+                print('%r generated an exception: %s' % (arg, exc))
+            else:
+                print('%r page is %d bytes' % (arg, len(data)))
+
+    return pd.concat(res, ignore_index=True)
 
     
