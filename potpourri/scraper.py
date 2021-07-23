@@ -319,6 +319,16 @@ class Scraper:
 
         return ret
 
+    def reset(self):
+        x = input("Are you sure? y/n")
+
+        if x == "y" or x == "yes":
+            self.results = {}
+            self.ids_sites = {}
+            print("Results were reset.")
+        else:
+            print("You chose no.")
+
     def make_pandas_df(self, keys_or_urls, descriptions=None):
         urls = []
         ids = []
@@ -419,6 +429,8 @@ class Scraper:
 
         return df
         
+
+
             
 
 
