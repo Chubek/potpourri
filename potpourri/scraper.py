@@ -427,7 +427,7 @@ class Scraper:
         for i, res_id in enumerate(keys_or_urls):
             if match_url(res_id):
                 if res_id in self.failures:
-                    descriptions.pop(i)
+                    descriptions[i] = "Dupeddoodidoo"
                     print("Url is in the list of failures, continuing...")
                     continue
                 res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
@@ -466,7 +466,7 @@ class Scraper:
         
         df = pd.DataFrame.from_dict({"id": ids, 
                                         "url": urls,
-                                        "descriptions": descriptions,
+                                        "descriptions": [d for d in descriptions if d != "Dupeddoodidoo"],
                                         "parsed_url": parsed_urls,
                                         "page_speed": page_speeds,
                                         "page_rank": page_ranks,                                        
