@@ -1,7 +1,9 @@
 from difflib import SequenceMatcher
 import re
 import threading
+from time import time
 from urllib.parse import urlparse
+import time
 
 url_regex = re.compile(r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})')
 
@@ -43,11 +45,21 @@ def get_best_match(given_key, given_dict):
     return best_possibility
 
 class ThreadWithResult(threading.Thread):
-    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None):
-        def function():
-            self.result = target(*args, **kwargs)
-        super().__init__(group=group, target=function, name=name, daemon=daemon)
-
+    def __init__(self, func, args=()):
+        super(ThreadWithResult, self).__init__()
+        self.func = func
+        self.args = args
+ 
+    def run(self):
+        time.sleep(2)
+        self.result = self.func(*self.args)
+ 
+    def get_result(self):
+        threading.Thread.join(self) # Wait for the thread to finish executing
+        try:
+            return self.result
+        except Exception:
+            return None
 
 def find_all_words(txt):
     return len(re.findall(r"(\w+)", txt))

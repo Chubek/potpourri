@@ -22,9 +22,9 @@ class ConcurrentRunner:
 
 
         for func_name, thread in threads.items():
-            thread.join()
-            results[func_name] = thread.result
-            self.results[func_name] = thread.result
+            res = thread.get_result()
+            results[func_name] = res
+            self.results[func_name] = res
 
         return results
 
@@ -39,8 +39,8 @@ class ConcurrentRunner:
 
         for func_name, thread in threads.items():
             thread.start()
-            thread.join()
-            results[func_name] = thread.result
+            res = thread.get_result()
+            results[func_name] = res
 
       
         return results
