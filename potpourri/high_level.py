@@ -1,5 +1,5 @@
 from .concurrent_runner import ConcurrentRunner
-
+import pandas as pd
 
 def search_and_scrape_single(scraper, psearch, keyword, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
@@ -33,7 +33,7 @@ def run_parallel(funcs, args):
 
     results = crunner.run_funcs_parallel(dict_func_args)
 
-    return results
+    return pd.concat(list(results.values()), ignore_index=True)
     
 def run_concurrent(funcs, args):
     crunner = ConcurrentRunner()
@@ -45,5 +45,5 @@ def run_concurrent(funcs, args):
 
     results = crunner.run_funcs_concurrent(dict_func_args)
 
-    return results
+    return pd.concat(list(results.values()), ignore_index=True)
     
