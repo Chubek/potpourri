@@ -113,7 +113,10 @@ class Scraper:
                     print(f"{failure} failed to scrape. It failed again! Adding to the list of global failures.")
                     self.failures.append(failure)
                     continue
-                
+        else:
+            print("Retry set to false. Extending global failures with local failures.")
+            self.failures.extend(failures)
+
 
         return identifiers
 

@@ -2,7 +2,7 @@ import threading
 import concurrent.futures
 import pandas as pd
 
-def search_and_scrape_single(scraper, psearch, keyword, retry=True, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_single(scraper, psearch, keyword, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
     urls = psearch.get_urls_only_single(keyword)
     descriptions = psearch.get_descs_only_single(keyword)
@@ -11,7 +11,7 @@ def search_and_scrape_single(scraper, psearch, keyword, retry=True, custom_tags=
 
     return df
 
-def search_and_scrape_multiple(scraper, psearch, keywords, retry=True, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_multiple(scraper, psearch, keywords, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_multiple_kw(keywords)
     urls = psearch.get_urls_only_single(keywords)
     descriptions = psearch.get_descs_only_single(keywords)
