@@ -12,9 +12,11 @@ class ConcurrentRunner:
         threads = {}
         results = {}
 
+        i = 0
         for func, args in funcs_and_args.items():
-            threads[f"{func.__name__}"] = ThreadWithResult(target=func, args=(*args, ))
-
+            threads[f"{func.__name__}_{i}"] = ThreadWithResult(target=func, args=(*args, ))
+            i += 1
+            
         for func_name, thread in threads.items():
             thread.start()
 
@@ -29,9 +31,11 @@ class ConcurrentRunner:
     def run_funcs_concurrent(self, funcs_and_args):
         threads = {}
         results = {}
-
+        
+        i = 0
         for func, args in funcs_and_args.items():
-            threads[f"{func.__name__}"] = ThreadWithResult(target=func, args=(*args, ))
+            threads[f"{func.__name__}_{i}"] = ThreadWithResult(target=func, args=(*args, ))
+            i += 1
 
         for func_name, thread in threads.items():
             thread.start()
