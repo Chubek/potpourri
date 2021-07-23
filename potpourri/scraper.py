@@ -17,6 +17,7 @@ class Scraper:
         self.results = {}
         self.ids_sites = {}
         self.rw = RandomWords()
+        self.failures = []
         init_rake(min_rake_length, max_rake_length)
 
 
@@ -40,7 +41,7 @@ class Scraper:
             get_keywords=get_kw)
             self.ids_sites[url] = identifier
         except:
-            print(f"{url} failed to scrape. If retry is enabled, it will retry at the end.")
+            print(f"{url} failed to scrape.")
             return None
 
         end = time.time()
@@ -49,13 +50,14 @@ class Scraper:
 
         return identifier
 
-    def scrape_multiple(self, urls, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):
+    def scrape_multiple(self, urls, get_kw=True, retry_num=5, custom_tags={}, custom_attrs={}, google_refer=False):
         start = time.time()
-
+        failures = []
         identifiers = []
         for url in urls:
             try:
                 html_body = get_response_body(url, referer_google=google_refer)
+                failures.append(url)
             except:
                 print(f"{url} timed out.")
                 continue
@@ -74,17 +76,44 @@ class Scraper:
                 identifiers.append(identifier)
             except:
                 print(f"{url} failed to scrape. If retry is enabled, it will retry at the end.")
+                failures.append(url)
                 continue
 
         end = time.time()
 
         print(f"Scraping operation done in {end - start} seconds.")
 
+        if retry_num > 0:
+            print(f"Retry num is set to {retry_num}. Now the scraper will attempt tp get the failures again...")
+
+            for failure in failures:
+                for i in range(retry_num):
+                    print(f"Trying to scrape {failure} again for {i + 1}th time...")
+
+                    id_ = self.scrape_single(failure, get_kw=get_kw, custom_tags=custom_tags, custom_attrs=custom_attrs, google_refer=google_refer)
+
+                    if id_ is not None:
+                        print("Retry successful...")
+                        identifiers.append(id_)
+                        self.ids_sites[failure] = id_
+                        continue
+                    else:
+                        print('Retry failed.')
+
+                if not failure in self.ids_sites:
+                    print("All retries failed. Adding to the list of final failures.")
+                    self.failures.append(failure) 
+                
+
         return identifiers
 
 
     def __get_element(self, res_id, element):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None.")
+                return None
+
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
             
         return self.results[get_best_match(res_id, self.results)][element]
@@ -214,6 +243,9 @@ class Scraper:
 
     def get_single_result(self, identifier):
         if match_url(identifier):
+            if identifier in self.failures:
+                print("Url is in the list of failures, returning None.")
+                return None
             identifier = self.ids_sites[get_best_match(identifier, self.ids_sites)]
 
         return self.results[get_best_match(identifier, self.results)]
@@ -224,6 +256,9 @@ class Scraper:
 
         for id_ in identifiers:
             if match_url(id_):
+                if id_ in self.failures:
+                    print("Url is in the list of failures, continuing...")
+                    continue
                 id_ = self.ids_sites[get_best_match(id_, self.ids_sites)]
             results_to_return.append(self.results[get_best_match(id_, self.results)])
         
@@ -232,6 +267,9 @@ class Scraper:
 
     def request_internal_urls_speeds(self, res_id):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None...")
+                return None
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         internal_urls = self.get_internal_urls(res_id)
@@ -245,6 +283,9 @@ class Scraper:
    
     def request_external_urls_speeds(self, res_id):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None...")
+                return None
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         external_urls = self.get_external_urls(res_id)
@@ -257,6 +298,9 @@ class Scraper:
 
     def request_internal_urls_ranks(self, res_id):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None...")
+                return None
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         internal_urls = self.get_internal_urls(res_id)
@@ -269,6 +313,9 @@ class Scraper:
 
     def request_external_urls_ranks(self, res_id):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None...")
+                return None
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         external_urls = self.get_external_urls(res_id)
@@ -281,6 +328,9 @@ class Scraper:
 
     def request_own_page_speed(self, res_id):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None...")
+                return None
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         url = self.results[res_id]["url"]["address"]
@@ -301,6 +351,9 @@ class Scraper:
 
     def request_own_page_rank(self, res_id):
         if match_url(res_id):
+            if res_id in self.failures:
+                print("Url is in the list of failures, returning None...")
+                return None
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         url = self.results[res_id]["url"]["parsed"]["netloc"]
@@ -363,6 +416,9 @@ class Scraper:
 
         for res_id in keys_or_urls:
             if match_url(res_id):
+                if res_id in self.failures:
+                    print("Url is in the list of failures, continuing...")
+                    continue
                 res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
             urls.append(self.get_address(res_id))
