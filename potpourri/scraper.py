@@ -22,8 +22,12 @@ class Scraper:
 
     def scrape_single(self, url, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):   
         start = time.time()
-        html_body = get_response_body(url, referer_google=google_refer)
-        
+        try:
+            html_body = get_response_body(url, referer_google=google_refer)
+        except:
+            print(f"{url} timed out.")
+            return None
+
         identifier = self.rw.get_random_word()
 
         while identifier in self.results or identifier is None:
@@ -46,7 +50,12 @@ class Scraper:
 
         identifiers = []
         for url in urls:
-            html_body = get_response_body(url, referer_google=google_refer)
+            try:
+                html_body = get_response_body(url, referer_google=google_refer)
+            except:
+                print(f"{url} timed out.")
+                continue
+
             identifier = self.rw.get_random_word()
 
             while identifier in self.results or identifier is None:

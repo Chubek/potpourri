@@ -35,6 +35,11 @@ def get_best_match(given_key, given_dict):
 
     best_possibility = list(sorted_dict.keys())[-1]
 
+    if list(sorted_dict.values)[-1] <= 0.5:
+        print(f"Key/Url {given_key} did not exist in the list but was matched with {best_possibility}. However, given their similarity, it seems like your key/url does not exist in the list at all. It probably timed out. Be wary.")
+        return best_possibility
+
+    print(f"Key/Url {given_key} did not exist in the list but was matched with {best_possibility}.")
     return best_possibility
 
 class ThreadWithResult(threading.Thread):
