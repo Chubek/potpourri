@@ -40,12 +40,12 @@ class Scraper:
             get_keywords=get_kw)
             self.ids_sites[url] = identifier
         except:
-            print(f"{url} failed to scrape.")
+            print(f"{url} failed to scrape. If retry is enabled, it will retry at the end.")
             return None
 
         end = time.time()
 
-        print(f"Operation done in {end - start} seconds.")
+        print(f"Scraping operation done in {end - start} seconds.")
 
         return identifier
 
@@ -73,12 +73,12 @@ class Scraper:
                 self.ids_sites[url] = identifier
                 identifiers.append(identifier)
             except:
-                print(f"{url} failed to scrape.")
+                print(f"{url} failed to scrape. If retry is enabled, it will retry at the end.")
                 continue
 
         end = time.time()
 
-        print(f"Operation done in {end - start} seconds.")
+        print(f"Scraping operation done in {end - start} seconds.")
 
         return identifiers
 
