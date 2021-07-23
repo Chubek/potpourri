@@ -424,9 +424,10 @@ class Scraper:
 
 
 
-        for res_id in keys_or_urls:
+        for i, res_id in enumerate(keys_or_urls):
             if match_url(res_id):
                 if res_id in self.failures:
+                    descriptions.pop(i)
                     print("Url is in the list of failures, continuing...")
                     continue
                 res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
