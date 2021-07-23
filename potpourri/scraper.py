@@ -32,13 +32,17 @@ class Scraper:
 
         while identifier in self.results or identifier is None:
             identifier = self.rw.get_random_word()
-                
-        self.results[identifier] = scrape(html_body, url,
-         tags_to_get=custom_tags, 
-         attrs_keywords_to_get=custom_attrs,
-         get_keywords=get_kw)
-        self.ids_sites[url] = identifier
         
+        try:
+            self.results[identifier] = scrape(html_body, url,
+            tags_to_get=custom_tags, 
+            attrs_keywords_to_get=custom_attrs,
+            get_keywords=get_kw)
+            self.ids_sites[url] = identifier
+        except:
+            print(f"{url} failed to scrape.")
+            return None
+
         end = time.time()
 
         print(f"Operation done in {end - start} seconds.")
@@ -61,12 +65,17 @@ class Scraper:
             while identifier in self.results or identifier is None:
                 identifier = self.rw.get_random_word()
 
-            self.results[identifier] = scrape(html_body, url,
+            try:
+                self.results[identifier] = scrape(html_body, url,
                 tags_to_get=custom_tags, 
                 attrs_keywords_to_get=custom_attrs,
                 get_keywords=get_kw)
-            self.ids_sites[url] = identifier
-            identifiers.append(identifier)
+                self.ids_sites[url] = identifier
+                identifiers.append(identifier)
+            except:
+                print(f"{url} failed to scrape.")
+                continue
+            
         end = time.time()
 
         print(f"Operation done in {end - start} seconds.")
