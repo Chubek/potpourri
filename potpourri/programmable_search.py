@@ -27,6 +27,7 @@ class ProgrammableSearch:
         start = time.time()
 
         for keyword in keywords:
+            print(f"Searching for keywword {keyword}")
             urls = search_web(keyword, self.res_num, self.step)
 
             self.results[keyword] = {"keyword": keyword, "urls": urls}

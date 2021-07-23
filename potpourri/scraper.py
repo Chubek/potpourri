@@ -55,6 +55,7 @@ class Scraper:
         failures = []
         identifiers = []
         for url in urls:
+            print(f"Scraping url {url}")
             try:
                 html_body = get_response_body(url, referer_google=google_refer)
                 failures.append(url)
