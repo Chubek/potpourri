@@ -75,7 +75,7 @@ class Scraper:
             except:
                 print(f"{url} failed to scrape.")
                 continue
-            
+
         end = time.time()
 
         print(f"Operation done in {end - start} seconds.")
@@ -382,7 +382,7 @@ class Scraper:
             classics.append(self.get_classics(res_id))
             parsed_urls.append(self.get_url_parsed(res_id))
             page_speeds.append(self.get_page_speed(res_id))
-            page_ranks.append(self.get_page_ranks(res_id))
+            page_ranks.append(self.get_page_rank(res_id))
 
         if descriptions is None:
             descriptions = [None for _ in range(len(keys_or_urls))]
