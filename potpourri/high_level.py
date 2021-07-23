@@ -1,5 +1,4 @@
-from .concurrent_runner import ConcurrentRunner
-import pandas as pd
+import threading
 
 def search_and_scrape_single(scraper, psearch, keyword, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
@@ -24,26 +23,12 @@ def search_and_scrape_multiple(scraper, psearch, keywords, custom_tags={}, custo
     return df
 
 def run_parallel(funcs, args):
-    crunner = ConcurrentRunner()
-
     if len(funcs) != len(args):
         funcs_list = [funcs[0] for _ in range(len(args))]
 
     dict_func_args = dict(zip(funcs_list, args))
 
-    results = crunner.run_funcs_parallel(dict_func_args)
+    for func, args in dict_func_args.items():
+        threading.Thread(target=func, args=(*args, )).start()
 
-    return pd.concat(list(results.values()), ignore_index=True)
-    
-def run_concurrent(funcs, args):
-    crunner = ConcurrentRunner()
-
-    if len(funcs) != len(args):
-        funcs_list = [funcs[0] for _ in range(len(args))]
-
-    dict_func_args = dict(zip(funcs_list, args))
-
-    results = crunner.run_funcs_concurrent(dict_func_args)
-
-    return pd.concat(list(results.values()), ignore_index=True)
     
