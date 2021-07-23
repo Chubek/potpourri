@@ -96,4 +96,13 @@ class ProgrammableSearch:
 
         return results
 
+    def reset(self):
+        x = input("Are you sure? y/n")
+
+        if x == "y" or x == "yes":
+            self.results = {}
+            print("Results were reset.")
+        else:
+            print("You chose no.")
+
 
