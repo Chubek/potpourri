@@ -24,9 +24,9 @@ def search_and_scrape_multiple(scraper, psearch, keywords, custom_tags={}, custo
 
     return df
 
-def run_parallel(func, args):
+def run_parallel(func, args, max_worker=5):
     res = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_worker) as executor:
 
         func_results = {executor.submit(func, *arg): arg for arg in args}
 

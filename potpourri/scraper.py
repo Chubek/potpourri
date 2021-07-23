@@ -50,17 +50,17 @@ class Scraper:
 
         return identifier
 
-    def scrape_multiple(self, urls, get_kw=True, retry_num=5, custom_tags={}, custom_attrs={}, google_refer=False):
+    def scrape_multiple(self, urls, get_kw=True, retry=True, custom_tags={}, custom_attrs={}, google_refer=False):
         start = time.time()
         failures = []
         identifiers = []
         for url in urls:
             print(f"Scraping url {url}")
             try:
-                html_body = get_response_body(url, referer_google=google_refer)
-                failures.append(url)
+                html_body = get_response_body(url, referer_google=google_refer)                
             except:
                 print(f"{url} timed out.")
+                failures.append(url)
                 continue
 
             identifier = self.rw.get_random_word()
@@ -84,26 +84,35 @@ class Scraper:
 
         print(f"Scraping operation done in {end - start} seconds.")
 
-        if retry_num > 0:
-            print(f"Retry num is set to {retry_num}. Now the scraper will attempt tp get the failures again...")
+        if retry:
+            print(f"Retry num is set to True. Now the scraper will attempt tp get the failures again...")
 
             for failure in failures:
-                for i in range(retry_num):
-                    print(f"Trying to scrape {failure} again for {i + 1}th time...")
+                print(f"Trying to scrape {failure} again...")
 
-                    id_ = self.scrape_single(failure, get_kw=get_kw, custom_tags=custom_tags, custom_attrs=custom_attrs, google_refer=google_refer)
+                try:
+                    html_body = get_response_body(failure, referer_google=google_refer)                
+                except:
+                    print(f"{failure} timed out. It failed again! Adding to the list of global failures.")
+                    self.failures.append(failure)                
+                    continue
 
-                    if id_ is not None:
-                        print("Retry successful...")
-                        identifiers.append(id_)
-                        self.ids_sites[failure] = id_
-                        continue
-                    else:
-                        print('Retry failed.')
+                identifier = self.rw.get_random_word()
 
-                if not failure in self.ids_sites:
-                    print("All retries failed. Adding to the list of final failures.")
-                    self.failures.append(failure) 
+                while identifier in self.results or identifier is None:
+                    identifier = self.rw.get_random_word()
+
+                try:
+                    self.results[identifier] = scrape(html_body, failure,
+                    tags_to_get=custom_tags, 
+                    attrs_keywords_to_get=custom_attrs,
+                    get_keywords=get_kw)
+                    self.ids_sites[failure] = identifier
+                    identifiers.append(identifier)
+                except:
+                    print(f"{failure} failed to scrape. It failed again! Adding to the list of global failures.")
+                    self.failures.append(failure)
+                    continue
                 
 
         return identifiers
