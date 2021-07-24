@@ -1,3 +1,4 @@
+from potpourri.scripts.scrape import scrape
 import threading
 import concurrent.futures
 import pandas as pd
@@ -11,6 +12,17 @@ def search_and_scrape_single(scraper, psearch, keyword, retry=False, custom_tags
 
     return df
 
+def search_and_scrape_single_wm(scraper, psearch, keyword, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+    psearch.search_single_kw(keyword)
+    urls = psearch.get_urls_only_single(keyword)
+    descriptions = psearch.get_descs_only_single(keyword)
+    scraper.scrape_multiple(urls, custom_tags=custom_tags, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
+    scraper.request_own_page_rank_multiple(urls)
+    scraper.request_own_page_speed_multiple(urls)
+    df = scraper.make_pandas_df(urls, descriptions)
+
+    return df
+
 def search_and_scrape_multiple(scraper, psearch, keywords, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_multiple_kw(keywords)
     urls = psearch.get_urls_only_single(keywords)
@@ -20,6 +32,23 @@ def search_and_scrape_multiple(scraper, psearch, keywords, retry=False, custom_t
     descriptions_summed = sum(descriptions, [])
 
     scraper.scrape_multiple(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
+    df = scraper.make_pandas_df(urls_summed, descriptions_summed)
+
+    return df
+
+def search_and_scrape_multiple_wm(scraper, psearch, keywords, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+    psearch.search_multiple_kw(keywords)
+    urls = psearch.get_urls_only_single(keywords)
+    descriptions = psearch.get_descs_only_single(keywords)
+
+    urls_summed = sum(urls, [])
+    descriptions_summed = sum(descriptions, [])
+
+    scraper.scrape_multiple(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google) 
+    
+    scraper.request_own_page_rank_multiple(urls)
+    scraper.request_own_page_speed_multiple(urls)
+
     df = scraper.make_pandas_df(urls_summed, descriptions_summed)
 
     return df

@@ -691,7 +691,8 @@ class Scraper:
         for res_id in res_ids:
             ret[res_id] = self.request_own_page_speed(res_id)
 
-        return ret
+
+        return [r for r in ret if r is not None]
 
     def request_own_page_rank(self, res_id):
         """
@@ -726,7 +727,7 @@ class Scraper:
         for res_id in res_ids:
             ret[res_id] = self.request_own_page_rank(res_id)
 
-        return ret
+        return [r for r in ret if r is not None]
 
     def reset(self):
         """
