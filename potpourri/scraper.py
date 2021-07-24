@@ -13,7 +13,17 @@ import time
 import pandas as pd
 
 class Scraper:
+    """This class encompasses all the necessary functions for scraping urls, and getting elements from them."""
     def __init__(self, min_rake_length=2, max_rake_length=4):
+        """
+        Instantiate a scraper.
+        
+        Keyword arguments:
+
+        min_rake_length -- the minimum number of words to consider for getting keywords
+        max_rake_length -- the maximum number of words to consider for getting keywords
+        
+        """
         self.results = {}
         self.ids_sites = {}
         self.rw = RandomWords()
@@ -21,7 +31,20 @@ class Scraper:
         init_rake(min_rake_length, max_rake_length)
 
 
-    def scrape_single(self, url, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False):   
+    def scrape_single(self, url, get_kw=True, custom_tags={}, custom_attrs={}, google_refer=False): 
+        """
+        Scrape a single url.
+
+        Arguments:
+        url -- the url to scrape
+        
+        Keyword arguments:
+        get_kw -- get keywords
+        custom_tags --- the custom tags with the attributes to get, like {"a": ["href"]}
+        custom_attrs --- the custom attributes with the triggering keywords, such as {"id": ["main"]}
+        google_refer --- Use Google as the referer in the request header or not
+        """
+
         start = time.time()
         try:
             html_body = get_response_body(url, referer_google=google_refer)
@@ -51,6 +74,20 @@ class Scraper:
         return identifier
 
     def scrape_multiple(self, urls, get_kw=True, retry=True, custom_tags={}, custom_attrs={}, google_refer=False):
+        """
+        Scrape multiple urls.
+
+        Arguments:
+        url -- the url to scrape
+        
+        Keyword arguments:
+        get_kw -- get keywords
+        custom_tags --- the custom tags with the attributes to get, like {"a": ["href"]}
+        custom_attrs --- the custom attributes with the triggering keywords, such as {"id": ["main"]}
+        google_refer --- Use Google as the referer in the request header or not
+        
+        """
+        
         start = time.time()
         failures = []
         identifiers = []
@@ -131,130 +168,382 @@ class Scraper:
             
         return self.results[get_best_match(res_id, self.results)][element]
 
-    def get_h1(self, res_id): 
+    def get_h1(self, res_id):
+        """
+        Get h1 elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """ 
         return self.__get_element(res_id, "h1")
 
     def get_h2(self, res_id):
+        """
+        Get h2 elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "h2")
 
     def get_h3(self, res_id):
+        """
+        Get h3 elements.
+
+        Arguments:
+        res_id -- ID or URL.        
+        """
         return self.__get_element(res_id, "h3")
 
     def get_h4(self, res_id):
+        """
+        Get h4 elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "h4")
 
     def get_h5(self, res_id):
+        """
+        Get h5 elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        
+        """
         return self.__get_element(res_id, "h5")
 
     def get_h6(self, res_id):
+        """
+        Get h6 elements.
+
+        Arguments:
+        res_id -- ID or URL.        
+        """
         return self.__get_element(res_id, "h6")
 
     def get_body(self, res_id):
+        """
+        Get body elements.
+
+        Arguments:
+        res_id -- ID or URL.        
+        """
         return self.__get_element(res_id, "body")
 
     def get_title(self, res_id):
+        """
+        Get title elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+        
         return self.__get_element(res_id, "title")
 
     def get_html(self, res_id):
+        """
+        Get html elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "html")
 
     def get_hrefs(self, res_id):
+        """
+        Get href elements.
+
+        Arguments:
+        res_id -- ID or URL.        
+        """
         return self.__get_element(res_id, "links")["hrefs"]
 
     def get_meta_desc(self, res_id):
+        """
+        Get meta description elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "meta_desc")
     
     def get_meta_keywords(self, res_id):
+        """
+        Get meta keywords elements.
+
+        Arguments:
+        res_id -- ID or URL.        
+        """
         return self.__get_element(res_id, "meta_keywords")
 
     def get_meta_author(self, res_id):
+        """
+        Get meta author elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "meta_author")
     
     def get_image_alts(self, res_id):
+        """
+        Get image alt elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "image_alts")
 
     def get_bolds(self, res_id):
+        """
+        Get bold elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "bolds")
 
     def get_italics(self, res_id):
+        """
+        Get italic elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "italics")
 
     def get_lists(self, res_id):
+        """
+        Get list elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "lists")
 
     def get_strongs(self, res_id):
+        """
+        Get strong elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "strongs")
 
     def get_classics(self, res_id):
+        """
+        Get classic elements.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "classics")
 
     def get_custom_tags(self, res_id):
+        """
+        Get custom tags.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "custom_tags")
 
     def get_specific_custom_tag(self, res_id, tag):
+        """
+        Get get specific custom tag.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "custom_tags")[tag]
 
     def get_custom_attrs(self, res_id):
+        """
+        Get custom attributes.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "custom_attrs")
 
     def get_specific_custom_attr(self, res_id, attr):
+        """
+        Get specific cusstom attributes.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "custom_attrs")[attr]
     
     def get_internal_urls(self, res_id):
+        """
+        Get internal urls.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "links")["internal_urls"]
 
     def get_external_urls(self, res_id):
+        """
+        Get external urls.
+
+        Arguments:
+        res_id -- ID or URL.
+        
+        """
         return self.__get_element(res_id, "links")["external_urls"]
 
     def get_internal_urls_speeds(self, res_id):
+        """
+        Get page speed of internal urls urls. Must be requested first.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "links")["internal_urls_speeds"]
 
     def get_external_urls_speeds(self, res_id):
+        """
+        Get page speed of extenral urls. Must be requested first.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "links")["external_urls_speeds"]
 
     def get_internal_urls_ranks(self, res_id):
+        """
+        Get ranks of internal urls. Must be requested first.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "links")["internal_urls_ranks"]
 
     def get_external_urls_ranks(self, res_id):
+        """
+        Get ranks of external urls. Must be requested first.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "links")["external_urls_ranks"]
 
     def get_page_speed(self, res_id):
+        """
+        Get page speed. Must be requested first.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "url")["page_speed"]
 
     def get_page_rank(self, res_id):
+        """
+        Get page rank. Must be requested first.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "url")["page_rank"]
 
     def get_address(self, res_id):
+        """
+        Get scraping url.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
         return self.__get_element(res_id, "url")["address"]
 
     def get_url_parsed(self, res_id):
+        """
+        Get parsed scraping url.
+
+        Arguments:
+        res_id -- ID or URL.
+        """
+
         return self.__get_element(res_id, "url")["parsed"]
 
     def pprint_results(self):
+        """
+        Pretty print results.
+        """
         pprint(self.results)
 
     def get_results(self):
+        """
+        Get results.
+        """
         return self.results
 
     def pprint_ids(self):
+        """
+        Pretty print IDs.
+        """
         pprint(self.ids_sites)
 
-    def get_ids(self):
+    def get_ids(self):       
+        """
+        Get IDs.
+        """
         return self.ids_sites
 
     def get_url_id(self, url):
+        """
+        Get ID of single URL.
+
+        Args:
+        url -- the URL
+        """
         return self.ids_sites[get_best_match(url, self.ids_sites)]
 
     def save_results_to_file(self, folder="~/scrape_results/jsons/"):
+        """
+        Save results to file.
+
+        Args:
+        folder -- the folder to save to, MUST EXIST.
+        """
         for id_, res in self.results:
             store_in_dir(folder, id_, res)
 
     def save_results_to_db(self, db_path="~/scrape_results/scrape_results.db", db_collection="scrape_res"):
+        """
+        Save results to UnQlite database file.
+
+        Keyword args:
+        db_path -- path to DB
+        db_collection -- name of the collection in the database.
+        """
+
         results = list(self.results.values())
 
         store_in_db(db_path, db_collection, results)
 
     def get_single_result(self, identifier):
+        """
+        Get a single result.
+
+        Args:
+        identifier -- the URL or the ID.
+        """
         if match_url(identifier):
             if identifier in self.failures:
                 print("Url is in the list of failures, returning None.")
@@ -265,6 +554,12 @@ class Scraper:
 
 
     def get_multiple_results(self, identifiers):
+        """
+        Get multiple results.
+
+        Args:
+        identifiers: List of URLs or IDs. Can be mixed.
+        """
         results_to_return = []
 
         for id_ in identifiers:
@@ -279,6 +574,12 @@ class Scraper:
 
 
     def request_internal_urls_speeds(self, res_id):
+        """
+        Request internal URL speeds.
+
+        Args:
+        res_id -- the ID or the URL
+        """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
@@ -295,6 +596,12 @@ class Scraper:
 
    
     def request_external_urls_speeds(self, res_id):
+        """
+        Request external URL speeds.
+
+        Args:
+        res_id -- the ID or the URL
+        """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
@@ -310,6 +617,12 @@ class Scraper:
         return external_urls_speed
 
     def request_internal_urls_ranks(self, res_id):
+        """
+        Request internal URL ranks.
+
+        Args:
+        res_id -- the ID or the URL
+        """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
@@ -325,6 +638,12 @@ class Scraper:
         return internal_urls_ranks
 
     def request_external_urls_ranks(self, res_id):
+        """
+        Request external URL ranks.
+
+        Args:
+        res_id -- the ID or the URL
+        """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
@@ -340,6 +659,12 @@ class Scraper:
         return external_urls_ranks
 
     def request_own_page_speed(self, res_id):
+        """
+        Request the scraped page speed.
+
+        Args:
+        res_id -- the ID or the URL
+        """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
@@ -355,6 +680,12 @@ class Scraper:
         return page_speed
 
     def request_own_page_speed_multiple(self, res_ids):
+        """
+        Request page speed for multiple IDs or urls
+
+        Args:
+        res_ids -- IDs or URLs, can be mixed
+        """
         ret = {}
 
         for res_id in res_ids:
@@ -363,6 +694,12 @@ class Scraper:
         return ret
 
     def request_own_page_rank(self, res_id):
+        """
+        Request scraped page rank.
+
+        Args:
+        res_id -- the ID or the URL
+        """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
@@ -378,6 +715,12 @@ class Scraper:
         return page_rank
 
     def request_own_page_rank_multiple(self, res_ids):
+        """
+        Request page rank for multiple IDs or urls
+
+        Args:
+        res_ids -- IDs or URLs, can be mixed
+        """
         ret = {}
 
         for res_id in res_ids:
@@ -386,6 +729,9 @@ class Scraper:
         return ret
 
     def reset(self):
+        """
+        Reset the class.
+        """
         x = input("Are you sure? y/n")
 
         if x == "y" or x == "yes":
@@ -396,6 +742,16 @@ class Scraper:
             print("You chose no.")
 
     def make_pandas_df(self, keys_or_urls, descriptions=None):
+        """
+        Make a Pandas dataframe from the selected keywords, or urls
+
+        Args:
+        keys_or_urls: IDs or URLs, can be mixed
+
+        Keyword args:
+        descriptions: The descriptions you've got from ProgrammableSearch.
+
+        """
         urls = []
         ids = []
         htmls = []
