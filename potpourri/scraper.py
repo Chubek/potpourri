@@ -658,17 +658,20 @@ class Scraper:
 
         return external_urls_ranks
 
-    def request_own_page_speed(self, res_id):
+    def request_own_page_speed(self, res_id, none_val=None):
         """
         Request the scraped page speed.
 
         Args:
         res_id -- the ID or the URL
+
+        Keyword args:
+        none_val -- value to return if None
         """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
-                return None
+                return none_val
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         url = self.results[res_id]["url"]["address"]
@@ -689,22 +692,26 @@ class Scraper:
         ret = {}
 
         for res_id in res_ids:
-            ret[res_id] = self.request_own_page_speed(res_id)
+            ret[res_id] = self.request_own_page_speed(res_id, none_val="NinaNoNo")
 
 
-        return [r for r in ret if r is not None]
+        return [r for r in ret if r != "NinaNoNo"]
 
-    def request_own_page_rank(self, res_id):
+    def request_own_page_rank(self, res_id, none_val=None):
         """
         Request scraped page rank.
 
         Args:
         res_id -- the ID or the URL
+
+        Keyword args:
+        none_val -- value to return if None
+
         """
         if match_url(res_id):
             if res_id in self.failures:
                 print("Url is in the list of failures, returning None...")
-                return None
+                return none_val
             res_id = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
         url = self.results[res_id]["url"]["parsed"]["netloc"]
@@ -725,9 +732,9 @@ class Scraper:
         ret = {}
 
         for res_id in res_ids:
-            ret[res_id] = self.request_own_page_rank(res_id)
+            ret[res_id] = self.request_own_page_rank(res_id, none_val="NinaNoNo")
 
-        return [r for r in ret if r is not None]
+        return [r for r in ret if r != "NinaNoNo"]
 
     def reset(self):
         """
