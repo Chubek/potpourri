@@ -4,7 +4,7 @@ from .scripts.request_body import get_response_body
 from .scripts.store_in_dir import store_in_dir
 from .scripts.get_urls import search_web
 from .scripts.unqlite_interface import store_in_db
-from .scripts.page_speed import get_page_speed_multiple, get_page_speed
+from .scripts.page_speed import get_multiple_speeds_async, get_page_speed
 from .scripts.page_rank import get_page_ranks
 from .scripts.utils import *
 from random_word import RandomWords
@@ -588,7 +588,7 @@ class Scraper:
 
         internal_urls = self.get_internal_urls(res_id)
 
-        internal_urls_speed = get_page_speed_multiple(internal_urls)
+        internal_urls_speed = get_multiple_speeds_async(internal_urls)
 
         self.results[res_id]["links"]["internal_urls_speeds"] = internal_urls_speed
 
@@ -610,7 +610,7 @@ class Scraper:
 
         external_urls = self.get_external_urls(res_id)
 
-        external_urls_speed = get_page_speed_multiple(external_urls)
+        external_urls_speed = get_multiple_speeds_async(external_urls)
 
         self.results[res_id]["links"]["external_urls_speeds"] = external_urls_speed
 
@@ -691,11 +691,23 @@ class Scraper:
         """
         ret = {}
 
+        for i, res_id in enumerate(res_ids):
+            if match_url(res_id):
+                if res_id in self.failures:
+                    print("Url is in the list of failures, continuing...")
+                    res_ids[i] = "didiporkhub"
+                res_ids[i] = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+
+        site_ids = dict(zip(list(self.ids_sites.values(), self.ids_sites.keys())))
+
+        results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"])
+
+        
         for res_id in res_ids:
-            ret[res_id] = self.request_own_page_speed(res_id, none_val="NinaNoNo")
+            self.results[res_id]["url"]["page_speed"] = results_page_speeds[site_ids[res_id]]
 
+        return results_page_speeds
 
-        return [r for r in ret if r != "NinaNoNo"]
 
     def request_own_page_rank(self, res_id, none_val=None):
         """
@@ -729,12 +741,22 @@ class Scraper:
         Args:
         res_ids -- IDs or URLs, can be mixed
         """
-        ret = {}
+        for i, res_id in enumerate(res_ids):
+            if match_url(res_id):
+                if res_id in self.failures:
+                    print("Url is in the list of failures, continuing...")
+                    res_ids[i] = "didiporkhub"
+                res_ids[i] = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
+        site_ids = dict(zip(list(self.ids_sites.values(), self.ids_sites.keys())))
+
+        results_page_ranks = get_page_ranks([site_ids[r] for r in res_ids if r != "didiporkhub"])
+
+        
         for res_id in res_ids:
-            ret[res_id] = self.request_own_page_rank(res_id, none_val="NinaNoNo")
+            self.results[res_id]["url"]["page_rank"] = results_page_ranks[site_ids[res_id]]
 
-        return [r for r in ret if r != "NinaNoNo"]
+        return results_page_ranks
 
     def reset(self):
         """
