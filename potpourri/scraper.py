@@ -11,6 +11,7 @@ from random_word import RandomWords
 from pprint import pprint
 import time
 import pandas as pd
+import concurrent.futures
 
 class Scraper:
     """This class encompasses all the necessary functions for scraping urls, and getting elements from them."""
@@ -157,6 +158,22 @@ class Scraper:
 
         return identifiers
 
+
+    def scrape_multiple_parallel(self, urls, max_worker=6, get_kw=True, retry=True, custom_tags={}, custom_attrs={}, google_refer=False):
+        chunks = [urls[x:x + 6] for x in range(0, len(urls), 6)]
+        args = (get_kw, retry, custom_tags, custom_attrs, google_refer)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_worker) as executor:
+            
+            func_results = {executor.submit(self.scrape_multiple, url_chunk, *args): url_chunk for url_chunk in chunks}
+
+            for future in concurrent.futures.as_completed(func_results):
+                arg = func_results[future]
+                try:
+                    data = future.result()
+                except Exception as exc:
+                    print('%r generated an exception: %s' % (arg, exc))
+                else:
+                    print('%r page is %d bytes' % (arg, len(data)))
 
     def __get_element(self, res_id, element):
         if match_url(res_id):
