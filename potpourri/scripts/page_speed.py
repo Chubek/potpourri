@@ -28,12 +28,10 @@ def get_multiple_speeds_async(urls):
             for future in concurrent.futures.as_completed(func_results):
                 arg = func_results[future]
                 try:
-                    data = future.result()                   
+                    _ = future.result()                   
                     
                 except Exception as exc:
                     print('%r generated an exception: %s' % (arg, exc))
-                else:
-                    print('%r page is %d bytes' % (arg, len(data)))
 
             time.sleep(0.25)
 
