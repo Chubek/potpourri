@@ -717,8 +717,6 @@ class Scraper:
 
         site_ids = {v: k for k, v in self.ids_sites.items()}
 
-        print(site_ids)
-
         results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"])
 
         

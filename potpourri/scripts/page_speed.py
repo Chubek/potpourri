@@ -15,7 +15,7 @@ def get_page_speed_fas(url, res):
     res[url] = get_page_speed(url)
     
 
-async def get_multiple_speeds_async(urls):
+def get_multiple_speeds_async(urls):
     res = {}
 
     chunks = [urls[x:x + 6] for x in range(0, len(urls), 6)]
@@ -35,7 +35,7 @@ async def get_multiple_speeds_async(urls):
                 else:
                     print('%r page is %d bytes' % (arg, len(data)))
 
-            time.sleep(0.5)
+            time.sleep(0.25)
 
 
     return res
