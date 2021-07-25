@@ -1,5 +1,4 @@
 from potpourri.scripts.scrape import scrape
-import threading
 import concurrent.futures
 import pandas as pd
 
@@ -64,7 +63,6 @@ def run_parallel(func, args, max_worker=5):
             try:
                 data = future.result()
                 res.append(data)
-                print(f"Got da")
             except Exception as exc:
                 print('%r generated an exception: %s' % (arg, exc))
             else:

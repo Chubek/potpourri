@@ -741,22 +741,12 @@ class Scraper:
         Args:
         res_ids -- IDs or URLs, can be mixed
         """
-        for i, res_id in enumerate(res_ids):
-            if match_url(res_id):
-                if res_id in self.failures:
-                    print("Url is in the list of failures, continuing...")
-                    res_ids[i] = "didiporkhub"
-                res_ids[i] = self.ids_sites[get_best_match(res_id, self.ids_sites)]
+        ret = {}
 
-        site_ids = dict(zip(list(self.ids_sites.values(), self.ids_sites.keys())))
-
-        results_page_ranks = get_page_ranks([site_ids[r] for r in res_ids if r != "didiporkhub"])
-
-        
         for res_id in res_ids:
-            self.results[res_id]["url"]["page_rank"] = results_page_ranks[site_ids[res_id]]
+            ret[res_id] = self.request_own_page_rank(res_id, none_val="NinaNoNo")
 
-        return results_page_ranks
+        return [r for r in ret if r != "NinaNoNo"]
 
     def reset(self):
         """

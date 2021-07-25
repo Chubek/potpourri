@@ -1,7 +1,7 @@
 import requests
 import os
-import asyncio
 import time
+import concurrent.futures
 
 def get_page_speed(url):
     req = requests.get(f'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={url}&strategy=mobile&key={os.environ["GOOGLE_API_KEY"]}')
@@ -11,38 +11,31 @@ def get_page_speed(url):
 
 
 def get_page_speed_fas(url, res):
+    print(f"Getting speed for {url}")
     res[url] = get_page_speed(url)
     
 
 async def get_multiple_speeds_async(urls):
     res = {}
 
-    tasks = []
-
-    for url in urls:
-        tasks.append(asyncio.create_task(get_page_speed_fas(url, res)))
-
-    chunks = [tasks[x:x + 4] for x in range(0, len(tasks), 4)]
+    chunks = [urls[x:x + 6] for x in range(0, len(urls), 6)]
 
     for task_chunk in chunks:
-        if len(task_chunk) == 4:
-            await task_chunk[0]
-            await task_chunk[1]
-            await task_chunk[2]
-            await task_chunk[3]
-        elif len(task_chunk) == 3:
-            await task_chunk[0]
-            await task_chunk[1]
-            await task_chunk[2]
-        elif len(task_chunk) == 2:
-            await task_chunk[0]
-            await task_chunk[1]
-        elif len(task_chunk) == 1:
-            await task_chunk[0]
-        else:
-            continue
+        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
 
-        time.sleep(0.25)
+            func_results = {executor.submit(get_page_speed_fas, url_chunk, res): url_chunk for url_chunk in task_chunk}
+
+            for future in concurrent.futures.as_completed(func_results):
+                arg = func_results[future]
+                try:
+                    data = future.result()                   
+                    
+                except Exception as exc:
+                    print('%r generated an exception: %s' % (arg, exc))
+                else:
+                    print('%r page is %d bytes' % (arg, len(data)))
+
+            time.sleep(0.5)
 
 
     return res
