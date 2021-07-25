@@ -79,7 +79,6 @@ def run_parallel(func, args, max_worker=5):
             arg = func_results[future]
             try:
                 data = future.result()
-                print(data)
                 res.append(data)
             except Exception as exc:
                 print('%r generated an exception: %s' % (arg, exc))
