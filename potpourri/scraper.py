@@ -160,7 +160,7 @@ class Scraper:
 
 
     def scrape_multiple_parallel(self, urls, max_worker=6, get_kw=True, retry=True, custom_tags={}, custom_attrs={}, google_refer=False):
-        chunks = [urls[x:x + 6] for x in range(0, len(urls), 6)]
+        chunks = [urls[x:x + max_worker] for x in range(0, len(urls), max_worker)]
         args = (get_kw, retry, custom_tags, custom_attrs, google_refer)
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_worker) as executor:
             

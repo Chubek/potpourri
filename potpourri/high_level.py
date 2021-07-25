@@ -2,13 +2,13 @@ from potpourri.scripts.scrape import scrape
 import concurrent.futures
 import pandas as pd
 
-def search_and_scrape_single(scraper, psearch, keyword, parallel=True, retry=True, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_single(scraper, psearch, keyword, parallel=True, max_worker=6, retry=True, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
     urls = psearch.get_urls_only_single(keyword)
     descriptions = psearch.get_descs_only_single(keyword)
 
     if parallel:
-        scraper.scrape_multiple_parallel(urls, custom_tags=custom_tags, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
+        scraper.scrape_multiple_parallel(urls, custom_tags=custom_tags, max_worker=max_worker, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
     else:
         scraper.scrape_multiple(urls, custom_tags=custom_tags, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
 
@@ -16,13 +16,13 @@ def search_and_scrape_single(scraper, psearch, keyword, parallel=True, retry=Tru
 
     return df
 
-def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, max_worker=6, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
     urls = psearch.get_urls_only_single(keyword)
     descriptions = psearch.get_descs_only_single(keyword)
 
     if parallel:
-        scraper.scrape_multiple_parallel(urls, custom_tags=custom_tags, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
+        scraper.scrape_multiple_parallel(urls, custom_tags=custom_tags, max_worker=max_worker, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
     else:
         scraper.scrape_multiple(urls, custom_tags=custom_tags, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
 
@@ -32,7 +32,7 @@ def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, retry=
 
     return df
 
-def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, max_worker=6, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_multiple_kw(keywords)
     urls = psearch.get_urls_only_single(keywords)
     descriptions = psearch.get_descs_only_single(keywords)
@@ -41,7 +41,7 @@ def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, retry=
     descriptions_summed = sum(descriptions, [])
 
     if parallel:   
-        scraper.scrape_multiple_parallel(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
+        scraper.scrape_multiple_parallel(urls_summed, retry=retry, max_worker=max_worker, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
     else:
         scraper.scrape_multiple(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
 
@@ -49,7 +49,7 @@ def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, retry=
 
     return df
 
-def search_and_scrape_multiple_wm(scraper, psearch, keywords, parallel=True, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_multiple_wm(scraper, psearch, keywords, parallel=True, max_worker=6, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_multiple_kw(keywords)
     urls = psearch.get_urls_only_single(keywords)
     descriptions = psearch.get_descs_only_single(keywords)
@@ -58,7 +58,7 @@ def search_and_scrape_multiple_wm(scraper, psearch, keywords, parallel=True, ret
     descriptions_summed = sum(descriptions, [])
 
     if parallel:
-        scraper.scrape_multiple_parallel(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google) 
+        scraper.scrape_multiple_parallel(urls_summed, retry=retry, max_worker=max_worker, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google) 
     else:
         scraper.scrape_multiple(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google) 
 
