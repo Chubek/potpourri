@@ -715,7 +715,9 @@ class Scraper:
                     res_ids[i] = "didiporkhub"
                 res_ids[i] = self.ids_sites[get_best_match(res_id, self.ids_sites)]
 
-        site_ids = dict(zip(list(self.ids_sites.values(), self.ids_sites.keys())))
+        site_ids = {v: k for k, v in self.ids_sites.items()}
+
+        print(site_ids)
 
         results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"])
 
