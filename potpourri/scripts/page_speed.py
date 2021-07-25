@@ -15,13 +15,13 @@ def get_page_speed_fas(url, res):
     res[url] = get_page_speed(url)
     
 
-def get_multiple_speeds_async(urls):
+def get_multiple_speeds_async(urls, num_worker=12):
     res = {}
 
-    chunks = [urls[x:x + 6] for x in range(0, len(urls), 6)]
+    chunks = [urls[x:x + num_worker] for x in range(0, len(urls), num_worker)]
 
     for task_chunk in chunks:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=num_worker) as executor:
 
             func_results = {executor.submit(get_page_speed_fas, url_chunk, res): url_chunk for url_chunk in task_chunk}
 

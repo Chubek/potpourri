@@ -699,7 +699,7 @@ class Scraper:
 
         return page_speed
 
-    def request_own_page_speed_multiple(self, res_ids):
+    def request_own_page_speed_multiple(self, res_ids, max_worker=12):
         """
         Request page speed for multiple IDs or urls
 
@@ -717,7 +717,7 @@ class Scraper:
 
         site_ids = {v: k for k, v in self.ids_sites.items()}
 
-        results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"])
+        results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"], num_worker=max_worker)
 
         
         for res_id in res_ids:
