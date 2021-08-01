@@ -34,8 +34,8 @@ def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, max_wo
 
 def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, max_worker=6, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_multiple_kw(keywords)
-    urls = psearch.get_urls_only_single(keywords)
-    descriptions = psearch.get_descs_only_single(keywords)
+    urls = psearch.get_urls_only_multiple(keywords)
+    descriptions = psearch.get_descs_only_multiple(keywords)
 
     urls_summed = sum(urls, [])
     descriptions_summed = sum(descriptions, [])
@@ -51,8 +51,8 @@ def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, max_wo
 
 def search_and_scrape_multiple_wm(scraper, psearch, keywords, parallel=True, max_worker=6, max_worker_speed=12, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_multiple_kw(keywords)
-    urls = psearch.get_urls_only_single(keywords)
-    descriptions = psearch.get_descs_only_single(keywords)
+    urls = psearch.get_urls_only_multiple(keywords)
+    descriptions = psearch.get_descs_only_multiple(keywords)
 
     urls_summed = sum(urls, [])
     descriptions_summed = sum(descriptions, [])
