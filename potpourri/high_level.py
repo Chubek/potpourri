@@ -16,7 +16,7 @@ def search_and_scrape_single(scraper, psearch, keyword, parallel=True, max_worke
 
     return df
 
-def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, max_worker=6, max_worker_speed=12, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, strategy="desktop", max_worker=6, max_worker_speed=12, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
     psearch.search_single_kw(keyword)
     urls = psearch.get_urls_only_single(keyword)
     descriptions = psearch.get_descs_only_single(keyword)
@@ -27,47 +27,29 @@ def search_and_scrape_single_wm(scraper, psearch, keyword, parallel=True, max_wo
         scraper.scrape_multiple(urls, custom_tags=custom_tags, retry=retry, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
 
     scraper.request_own_page_rank_multiple(urls)
-    scraper.request_own_page_speed_multiple(urls, max_worker=max_worker_speed)
+    scraper.request_own_page_speed_multiple(urls, max_worker=max_worker_speed, strategy=strategy)
     df = scraper.make_pandas_df(urls, descriptions)
 
     return df
 
 def search_and_scrape_multiple(scraper, psearch, keywords, parallel=True, max_worker=6, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
-    psearch.search_multiple_kw(keywords)
-    urls = psearch.get_urls_only_multiple(keywords)
-    descriptions = psearch.get_descs_only_multiple(keywords)
+    dfs = []
 
-    urls_summed = sum(urls, [])
-    descriptions_summed = sum(descriptions, [])
+    for keyword in keywords:
+        dfs.append(search_and_scrape_single(scraper, psearch, keyword, parallel=parallel, max_worker=max_worker, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, search_kw=search_kw, refer_google=refer_google))
 
-    if parallel:   
-        scraper.scrape_multiple_parallel(urls_summed, retry=retry, max_worker=max_worker, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
-    else:
-        scraper.scrape_multiple(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google)    
 
-    df = scraper.make_pandas_df(urls_summed, descriptions_summed)
+    return pd.concat(dfs, ignore_index=True)
 
-    return df
 
-def search_and_scrape_multiple_wm(scraper, psearch, keywords, parallel=True, max_worker=6, max_worker_speed=12, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
-    psearch.search_multiple_kw(keywords)
-    urls = psearch.get_urls_only_multiple(keywords)
-    descriptions = psearch.get_descs_only_multiple(keywords)
+def search_and_scrape_multiple_wm(scraper, psearch, keywords, strategy="desktop", parallel=True, max_worker=6, max_worker_speed=12, retry=False, custom_tags={}, custom_attrs={}, search_kw=True, refer_google=False):
+    dfs = []
 
-    urls_summed = sum(urls, [])
-    descriptions_summed = sum(descriptions, [])
+    for keyword in keywords:
+        dfs.append(search_and_scrape_single_wm(scraper, psearch, keyword, strategy=strategy, parallel=parallel, max_worker=max_worker, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, search_kw=search_kw, refer_google=refer_google))
 
-    if parallel:
-        scraper.scrape_multiple_parallel(urls_summed, retry=retry, max_worker=max_worker, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google) 
-    else:
-        scraper.scrape_multiple(urls_summed, retry=retry, custom_tags=custom_tags, custom_attrs=custom_attrs, get_kw=search_kw, google_refer=refer_google) 
 
-    scraper.request_own_page_rank_multiple(urls)
-    scraper.request_own_page_speed_multiple(urls, max_worker=max_worker_speed)
-
-    df = scraper.make_pandas_df(urls_summed, descriptions_summed)
-
-    return df
+    return pd.concat(dfs, ignore_index=True)
 
 def run_parallel(func, args, max_worker=5):
     res = []

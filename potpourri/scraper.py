@@ -590,7 +590,7 @@ class Scraper:
         return results_to_return
 
 
-    def request_internal_urls_speeds(self, res_id):
+    def request_internal_urls_speeds(self, res_id, strategy="desktop"):
         """
         Request internal URL speeds.
 
@@ -605,14 +605,14 @@ class Scraper:
 
         internal_urls = self.get_internal_urls(res_id)
 
-        internal_urls_speed = get_multiple_speeds_async(internal_urls)
+        internal_urls_speed = get_multiple_speeds_async(internal_urls, strategy=strategy)
 
         self.results[res_id]["links"]["internal_urls_speeds"] = internal_urls_speed
 
         return internal_urls_speed
 
    
-    def request_external_urls_speeds(self, res_id):
+    def request_external_urls_speeds(self, res_id, strategy="desktop"):
         """
         Request external URL speeds.
 
@@ -627,7 +627,7 @@ class Scraper:
 
         external_urls = self.get_external_urls(res_id)
 
-        external_urls_speed = get_multiple_speeds_async(external_urls)
+        external_urls_speed = get_multiple_speeds_async(external_urls, strategy=strategy)
 
         self.results[res_id]["links"]["external_urls_speeds"] = external_urls_speed
 
@@ -675,7 +675,7 @@ class Scraper:
 
         return external_urls_ranks
 
-    def request_own_page_speed(self, res_id, none_val=None):
+    def request_own_page_speed(self, res_id, strategy="desktop", none_val=None):
         """
         Request the scraped page speed.
 
@@ -693,13 +693,13 @@ class Scraper:
 
         url = self.results[res_id]["url"]["address"]
 
-        page_speed = get_page_speed(url)
+        page_speed = get_page_speed(url, strategy=strategy)
 
         self.results[res_id]["url"]["page_speed"] = page_speed
 
         return page_speed
 
-    def request_own_page_speed_multiple(self, res_ids, max_worker=12):
+    def request_own_page_speed_multiple(self, res_ids, strategy="desktop", max_worker=12):
         """
         Request page speed for multiple IDs or urls
 
@@ -717,7 +717,7 @@ class Scraper:
 
         site_ids = {v: k for k, v in self.ids_sites.items()}
 
-        results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"], num_worker=max_worker)
+        results_page_speeds = get_multiple_speeds_async([site_ids[r] for r in res_ids if r != "didiporkhub"], num_worker=max_worker, strategy=strategy)
 
         
         for res_id in res_ids:
